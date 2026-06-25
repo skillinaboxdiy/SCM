@@ -63,13 +63,13 @@
     overflow: hidden;
   }
 
-  /* FIXED SIDEBAR - Icons always visible */
+  /* FIXED SIDEBAR */
   .sidebar { 
     width: 76px;
     background: var(--sidebar-bg); 
     display: flex;
     flex-direction: column;
-    padding-top: 16px;
+    padding-top: 12px;
     box-sizing: border-box;
     z-index: 100;
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -78,6 +78,24 @@
   .sidebar:hover {
     width: 240px;
   }
+  
+  /* Sidebar Logo Styling */
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    margin: 0 12px 20px 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    background: #ffffff; /* White background so dark logo text is visible */
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+  }
+  .sidebar-logo img {
+    height: 32px;
+    object-fit: contain;
+  }
+
   .sidebar a { 
     display: flex; 
     align-items: center;
@@ -128,7 +146,7 @@
     overflow-y: auto;
   }
 
-  /* TOP HEADER - Colorful Gradient Line & Logo */
+  /* TOP HEADER */
   .top-header {
     height: 64px;
     background: #ffffff;
@@ -146,23 +164,10 @@
     background: linear-gradient(90deg, var(--primary-color), var(--accent-purple), var(--accent-orange));
   }
   .header-brand {
-    display: flex;
-    align-items: center;
     font-size: 18px;
     font-weight: 700;
     color: var(--text-main);
     letter-spacing: -0.02em;
-  }
-  .header-brand img {
-    height: 36px;
-    object-fit: contain;
-    margin-right: 16px;
-  }
-  .header-separator {
-    border-left: 2px solid var(--border-color);
-    padding-left: 16px;
-    color: var(--text-muted);
-    font-weight: 600;
   }
 
   /* PAGE CONTENT */
@@ -175,12 +180,27 @@
     color: var(--text-main);
   }
 
-  /* GRID & CARDS */
-  .grid-container {
+  /* DASHBOARD EXPLICIT GRID (Prevents wrapping) */
+  .dashboard-grid-top {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    grid-template-columns: 360px 1fr; /* Fixed width for KPIs, fluid for chart */
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .dashboard-grid-bottom {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
+
+  @media (max-width: 1100px) {
+    .dashboard-grid-top { grid-template-columns: 1fr; }
+    .dashboard-grid-bottom { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .dashboard-grid-bottom { grid-template-columns: 1fr; }
+  }
+
   .card {
     background: var(--bg-card);
     border: none;
@@ -192,9 +212,10 @@
     flex-direction: column;
     border-top: 4px solid var(--primary-color);
   }
-  .card:nth-child(2n) { border-top-color: var(--accent-purple); }
-  .card:nth-child(3n) { border-top-color: var(--accent-orange); }
-  .card:nth-child(4n) { border-top-color: var(--accent-green); }
+  .dashboard-grid-top .card:nth-child(2) { border-top-color: var(--accent-purple); }
+  .dashboard-grid-bottom .card:nth-child(1) { border-top-color: var(--primary-color); }
+  .dashboard-grid-bottom .card:nth-child(2) { border-top-color: var(--accent-green); }
+  .dashboard-grid-bottom .card:nth-child(3) { border-top-color: var(--text-main); }
 
   .card-header {
     margin-bottom: 20px;
@@ -287,6 +308,10 @@
 <body>
 <div class="app-container">
   <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="LOGO.png" alt="Skill in a box Logo">
+    </div>
+
     <a onclick="showPage('dashboard')" class="active" id="nav-dashboard">
       <span class="material-icons-outlined">dashboard</span>
       <span class="nav-text">Dashboard Pulse</span>
@@ -328,8 +353,7 @@
   <div class="main-wrapper">
     <header class="top-header">
       <div class="header-brand">
-        <img src="LOGO.png" alt="Skill in a box Logo">
-        <span class="header-separator">Warehouse Overview - Pulse</span>
+        Warehouse Overview - Pulse
       </div>
     </header>
 
@@ -338,13 +362,13 @@
       <div id="dashboard" class="page">
         <div class="page-title">Operational Dashboard</div>
 
-        <div class="grid-container">
+        <div class="dashboard-grid-top">
           <div class="card">
             <div class="card-header"><span class="card-title">Kit Capacity Overview</span></div>
             <div id="gaugeContainer" class="kpi-grid"><span style="color:#666">Syncing data...</span></div>
           </div>
 
-          <div class="card" style="grid-column: span 2;">
+          <div class="card">
             <div class="card-header"><span class="card-title">Kit Dispatches Comparison</span></div>
             <div style="display:flex; gap:12px; margin-bottom:16px; align-items:center;">
               <select id="dashChartMonth" onchange="loadDashboardChart()" style="width:140px; margin:0;">
@@ -355,10 +379,12 @@
                 <option value="10">October</option><option value="11">November</option><option value="12">December</option>
               </select>
               <input type="number" id="dashChartYear" onchange="loadDashboardChart()" onkeyup="if(event.key === 'Enter') loadDashboardChart()" style="width:100px; margin:0;" value="2026">
-              </div>
+            </div>
             <div id="kitBarChart" style="height:280px; width:100%;"></div>
           </div>
+        </div>
 
+        <div class="dashboard-grid-bottom">
           <div class="card">
             <div class="card-header"><span class="card-title">Dispatch Operations (OUT)</span></div>
             <div class="form-group"><label>Kit Specification</label><select id="kitSelect"><option></option></select></div>
@@ -406,13 +432,12 @@
               <span class="material-icons-outlined" style="vertical-align:middle; font-size:18px; margin-right:4px;">upload_file</span> Save Document
             </button>
           </div>
-
         </div>
       </div>
 
       <div id="stock" class="page" style="display:none">
         <div class="page-title">Stock Overview</div>
-        <div class="card">
+        <div class="card" style="border-top-color: var(--primary-color);">
           <div class="table-responsive">
             <table>
               <thead><tr><th>Asset Item</th><th>Qty On-Hand</th><th>FD Capacity</th><th>Basic Capacity</th></tr></thead>
@@ -424,7 +449,7 @@
 
       <div id="lowStock" class="page" style="display:none">
         <div class="page-title">Critical Alerts</div>
-        <div class="card">
+        <div class="card" style="border-top-color: var(--accent-red);">
           <div class="table-responsive">
             <table>
               <thead><tr><th>Asset Item</th><th>Current Stock</th><th>System Status</th></tr></thead>
@@ -436,7 +461,7 @@
 
       <div id="inStock" class="page" style="display:none">
         <div class="page-title">Inbound Log</div>
-        <div class="card">
+        <div class="card" style="border-top-color: var(--accent-green);">
           <div class="table-responsive">
             <table>
               <thead><tr><th>Timestamp</th><th>Item Received</th><th>Vendor Origin</th><th>Qty</th><th>Total Cost</th><th>Balance</th></tr></thead>
@@ -448,7 +473,7 @@
 
       <div id="outStock" class="page" style="display:none">
         <div class="page-title">Outbound Log</div>
-        <div class="card">
+        <div class="card" style="border-top-color: var(--primary-color);">
           <div class="table-responsive">
             <table>
               <thead><tr><th>Timestamp</th><th>Kit Dispatched</th><th>Carrier</th><th>Qty</th></tr></thead>
@@ -460,7 +485,7 @@
 
       <div id="bills" class="page" style="display:none">
         <div class="page-title">Document Ledger</div>
-        <div class="card">
+        <div class="card" style="border-top-color: var(--text-main);">
           <div class="table-responsive">
             <table>
               <thead><tr><th>System Log Date</th><th>Doc Date</th><th>Item Name</th><th>Qty</th><th>Attachment</th></tr></thead>
@@ -476,7 +501,7 @@
           <button id="btnToggleVendor" onclick="toggleVendorForm()">+ Create Vendor</button>
         </div>
         
-        <div class="card" id="vendorFormCard" style="display:none; margin-bottom:20px;">
+        <div class="card" id="vendorFormCard" style="display:none; margin-bottom:20px; border-top-color: var(--accent-purple);">
           <div class="card-header"><span class="card-title">Vendor Entry</span></div>
           <div style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap;">
             <input type="hidden" id="vendorId">
@@ -490,7 +515,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" style="border-top-color: var(--primary-color);">
           <div class="table-responsive">
             <table>
               <thead><tr><th>Vendor Name</th><th>Contact Number</th><th>Products Provided</th><th>Action</th></tr></thead>
@@ -502,7 +527,7 @@
 
       <div id="heatmap" class="page" style="display:none">
         <div class="page-title">Logistics Map</div>
-        <div class="card">
+        <div class="card" style="border-top-color: var(--accent-orange);">
           <div style="display:flex; gap:12px; margin-bottom:20px;">
             <select id="heatmapMonth" onchange="loadHeatmap()" style="width:140px; margin:0;">
               <option value="0">All Months</option>
@@ -520,8 +545,8 @@
       <div id="reports" class="page" style="display:none">
         <div class="page-title">Reporting Analytics</div>
         
-        <div class="grid-container">
-          <div class="card">
+        <div style="display: grid; grid-template-columns: 350px 1fr; gap: 20px; margin-bottom: 20px;">
+          <div class="card" style="border-top-color: var(--primary-color);">
             <div class="card-header"><span class="card-title">Data Exports</span></div>
             <div style="display:flex; flex-direction:column; gap:12px;">
               <button onclick="triggerExport('exportStockCSV', 'Stock_Summary.csv')" class="btn-outline" style="text-align:left;">
@@ -536,7 +561,7 @@
             </div>
           </div>
           
-          <div class="card">
+          <div class="card" style="border-top-color: var(--accent-purple);">
             <div class="card-header"><span class="card-title">Lifetime Dispatches</span></div>
             <button onclick="loadKitAnalytics()" class="btn-outline" style="margin-bottom:16px;">Run Lifetime Query</button>
             <div class="table-responsive">
@@ -548,7 +573,7 @@
           </div>
         </div>
 
-        <div class="card" style="margin-top:20px;">
+        <div class="card" style="border-top-color: var(--text-main);">
           <div class="card-header"><span class="card-title">Monthly Period Review</span></div>
           <div style="display:flex; gap:12px; margin-bottom:20px;">
             <select id="reportMonth" style="width:140px; margin:0;">
@@ -618,6 +643,7 @@ async function apiCall(action, method = 'GET', data = {}) {
 ========================= */
 let appData = { stockSummary: [], products: [], kits: [], predictions: {}, vendors: [] };
 let cachedVendors = [];
+let myChartInstance = null; // Global reference for resizing
 
 /* =========================
    UI Utilities
@@ -657,7 +683,11 @@ function showPage(page){
   document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
   document.getElementById('nav-' + page).classList.add('active');
 
-  if(page === "dashboard") loadDashboardChart();
+  if(page === "dashboard") {
+    loadDashboardChart();
+    // Re-trigger resize to ensure chart perfectly fits new container bounds
+    setTimeout(() => { if(myChartInstance) myChartInstance.resize(); }, 100);
+  }
   if(page === "stock") renderStock(appData.stockSummary);
   if(page === "lowStock") renderLowStock(appData.stockSummary);
   if(page === "inStock") loadInStock();
@@ -678,10 +708,14 @@ function fetchAllData() {
     
     // Automatically load chart on initialization
     loadDashboardChart();
-    
     toggleButtons(false);
   });
 }
+
+// Ensure chart resizes smoothly when window resizes
+window.addEventListener('resize', function() {
+  if(myChartInstance) { myChartInstance.resize(); }
+});
 
 // Trigger initial data fetch on page load
 window.onload = function() { fetchAllData(); };
@@ -861,7 +895,7 @@ function loadMonthlyReports() {
 /* ECharts Implementation */
 function loadDashboardChart() {
   const chartDom = document.getElementById("kitBarChart");
-  let myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
+  if (!myChartInstance) { myChartInstance = echarts.init(chartDom); }
   
   apiCall("getMonthlyReport", "GET", { month: $("#dashChartMonth").val(), year: $("#dashChartYear").val() }).then(data => {
     const kits = Object.keys(data);
@@ -869,7 +903,7 @@ function loadDashboardChart() {
     
     const vibrantColors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
     
-    myChart.setOption({
+    myChartInstance.setOption({
       color: vibrantColors,
       tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, backgroundColor: '#fff', borderColor: '#e2e8f0', textStyle: {color: '#1e293b', fontWeight:'500'} },
       grid: { left: '2%', right: '2%', bottom: '5%', top: '10%', containLabel: true },
@@ -879,7 +913,6 @@ function loadDashboardChart() {
         axisLabel: { 
           fontSize: 11, 
           color: '#64748b',
-          // Enables label text wrapping so long names don't overlap or get cut off
           interval: 0,
           width: 120,
           overflow: 'break'
@@ -899,13 +932,13 @@ function loadDashboardChart() {
 
 function loadHeatmap() {
   const chartDom = document.getElementById("heatmapContainer");
-  let myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
+  let heatmapChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
 
   apiCall("getStateHeatmap", "GET", { month: $("#heatmapMonth").val(), year: $("#heatmapYear").val() }).then(data => {
     fetch("https://code.highcharts.com/mapdata/countries/in/in-all.geo.json").then(r => r.json()).then(geoJson => {
       echarts.registerMap('india', geoJson);
       let maxVal = Math.max(...data.map(d => d.value)) || 10;
-      myChart.setOption({
+      heatmapChart.setOption({
         tooltip: { trigger: 'item', backgroundColor: '#1e293b', borderColor: '#1e293b', textStyle:{color:'#fff', fontSize:13} },
         visualMap: { min: 0, max: maxVal, inRange: { color: ['#eff6ff', '#60a5fa', '#1d4ed8'] }, textStyle: { color: '#64748b' } },
         series: [{ type: 'map', map: 'india', data: data, roam: true, itemStyle: { borderColor: '#ffffff', borderWidth: 1 } }]
