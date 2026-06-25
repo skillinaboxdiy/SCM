@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Warehouse Overview - Pulse</title>
+<title>Warehouse Overview - Skill in a Box</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,7 +65,7 @@
 
   /* FIXED SIDEBAR - Icons always visible */
   .sidebar { 
-    width: 76px; /* Wide enough to hold the icon safely */
+    width: 76px;
     background: var(--sidebar-bg); 
     display: flex;
     flex-direction: column;
@@ -91,7 +91,6 @@
     overflow: hidden;
     white-space: nowrap;
   }
-  /* Icon constraints so it never squishes */
   .sidebar a .material-icons-outlined { 
     font-size: 24px; 
     width: 24px; 
@@ -129,9 +128,9 @@
     overflow-y: auto;
   }
 
-  /* TOP HEADER - Colorful Gradient Line */
+  /* TOP HEADER - Colorful Gradient Line & Logo */
   .top-header {
-    height: 56px;
+    height: 64px;
     background: #ffffff;
     display: flex;
     align-items: center;
@@ -140,7 +139,6 @@
     box-shadow: var(--shadow-sm);
     position: relative;
   }
-  /* Vibrant top accent line */
   .top-header::before {
     content: '';
     position: absolute;
@@ -155,10 +153,16 @@
     color: var(--text-main);
     letter-spacing: -0.02em;
   }
-  .header-brand .material-icons-outlined { 
-    margin-right: 12px; 
-    color: var(--primary-color); 
-    font-size: 26px;
+  .header-brand img {
+    height: 36px;
+    object-fit: contain;
+    margin-right: 16px;
+  }
+  .header-separator {
+    border-left: 2px solid var(--border-color);
+    padding-left: 16px;
+    color: var(--text-muted);
+    font-weight: 600;
   }
 
   /* PAGE CONTENT */
@@ -186,9 +190,8 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    border-top: 4px solid var(--primary-color); /* Color pop on cards */
+    border-top: 4px solid var(--primary-color);
   }
-  /* Alternate card accent colors */
   .card:nth-child(2n) { border-top-color: var(--accent-purple); }
   .card:nth-child(3n) { border-top-color: var(--accent-orange); }
   .card:nth-child(4n) { border-top-color: var(--accent-green); }
@@ -202,7 +205,7 @@
     color: var(--text-main);
   }
 
-  /* FORMS (Friendly & Softer) */
+  /* FORMS */
   .form-group { margin-bottom: 16px; }
   .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
   input[type="text"], input[type="number"], input[type="date"], select, textarea {
@@ -224,12 +227,11 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
   }
   
-  /* Select2 Override for softer UI */
   .select2-container .select2-selection--single { height: 38px !important; border-radius: var(--radius-sm) !important; border: 1px solid var(--border-color) !important; display: flex; align-items: center; background-color: #f8fafc !important; }
   .select2-container--default .select2-selection--single .select2-selection__rendered { font-size: 13px; padding-left: 12px; color: var(--text-main) !important;}
   .select2-container--default .select2-selection--single .select2-selection__arrow { height: 36px !important; }
 
-  /* VIBRANT BUTTONS */
+  /* BUTTONS */
   button {
     height: 38px;
     padding: 0 20px;
@@ -262,7 +264,7 @@
   th { background: #f8fafc; font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; }
   tr:hover td { background: #f1f5f9; }
 
-  /* KPI GRID (Colorful Cards) */
+  /* KPI GRID */
   .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .kpi-card {
     display: flex; align-items: center; justify-content: space-between;
@@ -326,8 +328,8 @@
   <div class="main-wrapper">
     <header class="top-header">
       <div class="header-brand">
-        <span class="material-icons-outlined">all_inclusive</span>
-        Warehouse Overview - Pulse
+        <img src="LOGO.png" alt="Skill in a box Logo">
+        <span class="header-separator">Warehouse Overview - Pulse</span>
       </div>
     </header>
 
@@ -345,16 +347,15 @@
           <div class="card" style="grid-column: span 2;">
             <div class="card-header"><span class="card-title">Kit Dispatches Comparison</span></div>
             <div style="display:flex; gap:12px; margin-bottom:16px; align-items:center;">
-              <select id="dashChartMonth" style="width:140px; margin:0;">
+              <select id="dashChartMonth" onchange="loadDashboardChart()" style="width:140px; margin:0;">
                 <option value="0">All Months</option>
                 <option value="1">January</option><option value="2">February</option><option value="3">March</option>
                 <option value="4">April</option><option value="5">May</option><option value="6">June</option>
                 <option value="7">July</option><option value="8">August</option><option value="9">September</option>
                 <option value="10">October</option><option value="11">November</option><option value="12">December</option>
               </select>
-              <input type="number" id="dashChartYear" style="width:100px; margin:0;" value="2026">
-              <button onclick="loadDashboardChart()" class="btn-outline">Refresh Chart</button>
-            </div>
+              <input type="number" id="dashChartYear" onchange="loadDashboardChart()" onkeyup="if(event.key === 'Enter') loadDashboardChart()" style="width:100px; margin:0;" value="2026">
+              </div>
             <div id="kitBarChart" style="height:280px; width:100%;"></div>
           </div>
 
@@ -503,15 +504,14 @@
         <div class="page-title">Logistics Map</div>
         <div class="card">
           <div style="display:flex; gap:12px; margin-bottom:20px;">
-            <select id="heatmapMonth" style="width:140px; margin:0;">
+            <select id="heatmapMonth" onchange="loadHeatmap()" style="width:140px; margin:0;">
               <option value="0">All Months</option>
               <option value="1">January</option><option value="2">February</option><option value="3">March</option>
               <option value="4">April</option><option value="5">May</option><option value="6">June</option>
               <option value="7">July</option><option value="8">August</option><option value="9">September</option>
               <option value="10">October</option><option value="11">November</option><option value="12">December</option>
             </select>
-            <input type="number" id="heatmapYear" value="2026" style="width:100px; margin:0;">
-            <button onclick="loadHeatmap()" class="btn-outline">Generate Map</button>
+            <input type="number" id="heatmapYear" onchange="loadHeatmap()" onkeyup="if(event.key === 'Enter') loadHeatmap()" value="2026" style="width:100px; margin:0;">
           </div>
           <div id="heatmapContainer" style="height:480px;"></div>
         </div>
@@ -675,10 +675,15 @@ function fetchAllData() {
     renderDropdowns(data.products, data.kits, data.vendors);
     renderStock(data.stockSummary);
     renderLowStock(data.stockSummary);
+    
+    // Automatically load chart on initialization
     loadDashboardChart();
+    
     toggleButtons(false);
   });
 }
+
+// Trigger initial data fetch on page load
 window.onload = function() { fetchAllData(); };
 
 /* =========================
@@ -689,7 +694,6 @@ function renderDashboard(predictions) {
     document.getElementById("gaugeContainer").innerHTML = "No configured KPI data."; return;
   }
   let html = ""; 
-  // Vibrant enterprise colors
   const colors = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ef4444", "#06b6d4"];
   const icons = ["inventory_2", "check_circle", "hourglass_top", "star", "build", "deployed_code"];
   
@@ -697,7 +701,6 @@ function renderDashboard(predictions) {
     let color = colors[i % colors.length];
     let icon = icons[i % icons.length];
     
-    // Creates a beautiful card with a colored left-border and an icon badge
     html += `
       <div class="kpi-card" style="border-left: 4px solid ${color};">
         <div>
@@ -855,7 +858,7 @@ function loadMonthlyReports() {
   });
 }
 
-/* Vibrant ECharts */
+/* ECharts Implementation */
 function loadDashboardChart() {
   const chartDom = document.getElementById("kitBarChart");
   let myChart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
@@ -864,14 +867,25 @@ function loadDashboardChart() {
     const kits = Object.keys(data);
     const quantities = Object.values(data);
     
-    // Modern vibrant palette
     const vibrantColors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
     
     myChart.setOption({
       color: vibrantColors,
       tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, backgroundColor: '#fff', borderColor: '#e2e8f0', textStyle: {color: '#1e293b', fontWeight:'500'} },
       grid: { left: '2%', right: '2%', bottom: '5%', top: '10%', containLabel: true },
-      xAxis: { type: 'category', data: kits, axisLabel: { fontSize: 11, color: '#64748b' }, axisLine: { lineStyle: { color: '#e2e8f0' } } },
+      xAxis: { 
+        type: 'category', 
+        data: kits, 
+        axisLabel: { 
+          fontSize: 11, 
+          color: '#64748b',
+          // Enables label text wrapping so long names don't overlap or get cut off
+          interval: 0,
+          width: 120,
+          overflow: 'break'
+        }, 
+        axisLine: { lineStyle: { color: '#e2e8f0' } } 
+      },
       yAxis: { type: 'value', name: 'Volume', nameTextStyle: {fontSize: 11, color:'#64748b'}, axisLabel: { fontSize: 12, color: '#64748b', fontWeight:'600' }, splitLine: { lineStyle: { color: '#f1f5f9' } } },
       series: [{
         type: 'bar',
