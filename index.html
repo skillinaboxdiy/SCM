@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Inventory ERP | Enterprise</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================
+     PREMIUM ENTERPRISE DARK THEME
+     Inspired by high-end modern SaaS
+  ========================================== */
+  :root {
+    --bg-main: #0B0E14;        /* Deep midnight background */
+    --bg-surface: #131720;     /* Elevated surface */
+    --bg-surface-hover: #1A1F2B;
+    
+    --text-primary: #FFFFFF;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    
+    --border-color: #232A3B;
+    --border-light: rgba(255, 255, 255, 0.08);
+    
+    /* Premium Indigo/Purple Accents */
+    --accent-main: #6366F1;    
+    --accent-hover: #818CF8;
+    --accent-glow: rgba(99, 102, 241, 0.25);
+    
+    --danger: #F43F5E;
+    --danger-bg: rgba(244, 63, 94, 0.1);
+    --success: #10B981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+    --shadow-md: 0 8px 16px rgba(0,0,0,0.4);
+    --shadow-glow: 0 0 20px var(--accent-glow);
+    
+    --radius-md: 10px;
+    --radius-lg: 16px;
+  }
+
+  body { 
+    margin: 0; 
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+    background: var(--bg-main); 
+    color: var(--text-primary); 
+    overflow-x: hidden; 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* SIDEBAR - Glassmorphism Effect */
+  .sidebar { 
+    position: fixed; 
+    width: 260px; 
+    height: 100vh; 
+    background: rgba(19, 23, 32, 0.6); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-secondary); 
+    padding: 32px 20px; 
+    box-sizing: border-box; 
+    z-index: 100; 
+    border-right: 1px solid var(--border-light);
+  }
+  .sidebar h2 { 
+    margin-top: 0; 
+    padding-bottom: 30px; 
+    padding-left: 12px;
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #FFFFFF, #94A3B8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .sidebar a { 
+    display: flex; 
+    align-items: center;
+    color: var(--text-secondary); 
+    text-decoration: none; 
+    padding: 12px 16px; 
+    margin-bottom: 8px;
+    border-radius: var(--radius-md);
+    cursor: pointer; 
+    font-weight: 500; 
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+  }
+  .sidebar a:hover { 
+    background: var(--bg-surface-hover); 
+    color: var(--text-primary); 
+  }
+  .sidebar a.active { 
+    background: rgba(99, 102, 241, 0.1); 
+    color: var(--accent-hover); 
+    font-weight: 600;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: inset 0 0 12px rgba(99, 102, 241, 0.05);
+  }
+
+  /* MAIN LAYOUT */
+  .main { 
+    margin-left: 260px; 
+    padding: 40px 48px; 
+    width: calc(100% - 260px); 
+    box-sizing: border-box; 
+  }
+  .page-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 32px; 
+  }
+  h1 { 
+    margin: 0 0 32px 0; 
+    font-size: 2rem; 
+    font-weight: 600; 
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+  }
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  /* GRIDS & CARDS */
+  .flex { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
+    gap: 24px; 
+    align-items: stretch; 
+  }
+  .card, .card-standard { 
+    background: var(--bg-surface); 
+    padding: 28px; 
+    border-radius: var(--radius-lg); 
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm); 
+    overflow-x: auto; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover, .card-standard:hover {
+    box-shadow: var(--shadow-md);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .card { 
+    display: flex; 
+    flex-direction: column; 
+    margin-bottom: 0; 
+  }
+  .card-standard {
+    margin-bottom: 24px;
+  }
+  .card button { margin-top: auto; } 
+  .gauge-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+    gap: 24px; 
+    align-items: stretch; 
+  }
+  .gauge { 
+    text-align: center; 
+    padding: 32px 24px; 
+    background: var(--bg-main); 
+    border-radius: var(--radius-lg); 
+    border: 1px solid var(--border-light); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Subtle glow behind gauges */
+  .gauge::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: var(--accent-main);
+    filter: blur(80px);
+    opacity: 0.15;
+    z-index: 0;
+  }
+  .gauge h3 { min-height: 40px; margin: 0 0 16px 0; width: 100%; text-align: center; z-index: 1; }
+  .gauge svg { z-index: 1; }
+
+  /* FORMS & INPUTS */
+  input[type="text"], input[type="number"], input[type="date"], select, textarea { 
+    height: 48px; 
+    padding: 12px 16px; 
+    margin: 0 0 20px 0; 
+    width: 100%; 
+    border: 1px solid var(--border-color); 
+    border-radius: var(--radius-md); 
+    box-sizing: border-box; 
+    font-family: inherit; 
+    font-size: 0.95rem; 
+    color: var(--text-primary);
+    background-color: var(--bg-main);
+    transition: all 0.3s ease;
+  }
+  input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-main);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+    background-color: var(--bg-surface-hover);
+  }
+  input::placeholder, textarea::placeholder {
+    color: var(--text-muted);
+  }
+  textarea { height: auto; min-height: 100px; resize: vertical; } 
+  input[type="file"] { 
+    height: auto; 
+    padding: 12px 0; 
+    margin-bottom: 20px; 
+    border: none; 
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  
+  /* SELECT2 DARK THEME OVERRIDES */
+  .select2-container { width: 100% !important; margin: 0 0 20px 0 !important; }
+  .select2-container .select2-selection--single { 
+    height: 48px !important; 
+    border: 1px solid var(--border-color) !important; 
+    border-radius: var(--radius-md) !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    background-color: var(--bg-main) !important;
+    transition: all 0.3s ease;
+  }
+  .select2-container--open .select2-selection--single {
+    border-color: var(--accent-main) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__rendered { 
+    padding-left: 16px !important; 
+    font-size: 0.95rem; 
+    color: var(--text-primary) !important; 
+  }
+  .select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: var(--text-muted) !important;
+  }
+  .select2-container--default .select2-selection--single .select2-selection__arrow { 
+    height: 48px !important; 
+    right: 12px !important; 
+  }
+  .select2-dropdown { 
+    z-index: 99999 !important; 
+    background-color: var(--bg-surface) !important;
+    border: 1px solid var(--border-light) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-md) !important;
+    backdrop-filter: blur(10px);
+  }
+  .select2-container--default .select2-search--dropdown .select2-search__field {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 6px;
+  }
+  .select2-results__option { font-size: 0.95rem; color: var(--text-secondary); padding: 10px 16px !important; }
+  .select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: var(--bg-main) !important;
+  }
+  .select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--accent-main) !important;
+    color: #FFF !important;
+  }
+
+  /* PREMIUM BUTTONS */
+  button { 
+    padding: 14px 24px; 
+    background: linear-gradient(135deg, var(--accent-main) 0%, #4F46E5 100%);
+    border: 1px solid rgba(255,255,255,0.1); 
+    border-radius: var(--radius-md); 
+    color: white; 
+    font-size: 0.95rem; 
+    font-weight: 600; 
+    letter-spacing: 0.02em;
+    cursor: pointer; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+  button:hover:not(:disabled) { 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px var(--accent-glow);
+    filter: brightness(1.1);
+  }
+  button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  button:disabled { 
+    background: var(--border-color); 
+    color: var(--text-muted);
+    cursor: not-allowed; 
+    box-shadow: none;
+    border: none;
+  }
+  
+  .btn-small { 
+    padding: 8px 16px; 
+    font-size: 0.85rem; 
+    background: var(--bg-main); 
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+    width: auto; 
+  }
+  .btn-small:hover:not(:disabled) { 
+    background: var(--bg-surface-hover); 
+    border-color: var(--text-muted);
+  }
+  .btn-cancel { 
+    background: transparent; 
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    display: none; 
+    width: auto; 
+    box-shadow: none;
+  }
+  .btn-cancel:hover:not(:disabled) { 
+    background: var(--bg-main); 
+    color: var(--text-primary);
+  }
+
+  .btn-link { 
+    color: var(--accent-hover); 
+    font-weight: 500; 
+    text-decoration: none; 
+  }
+  .btn-link:hover { text-decoration: underline; color: #FFF; }
+
+  /* ENTERPRISE TABLES */
+  table { 
+    width: 100%; 
+    border-collapse: separate; 
+    border-spacing: 0;
+    margin-top: 8px; 
+    min-width: 600px; 
+  }
+  th, td { 
+    padding: 16px 20px; 
+    border-bottom: 1px solid var(--border-light); 
+    text-align: left; 
+    font-size: 0.95rem;
+  }
+  th { 
+    background: rgba(0,0,0,0.2); 
+    font-weight: 600; 
+    color: var(--text-secondary); 
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+  th:first-child { border-top-left-radius: 8px; }
+  th:last-child { border-top-right-radius: 8px; }
+  
+  tr { transition: background-color 0.2s ease; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  tr:last-child td { border-bottom: none; }
+
+  /* UTILITIES & ALERTS */
+  .toast { 
+    position: fixed; 
+    bottom: 32px; 
+    right: 32px; 
+    background: rgba(16, 185, 129, 0.9); 
+    backdrop-filter: blur(8px);
+    color: white; 
+    padding: 16px 24px; 
+    border-radius: var(--radius-md); 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+    font-weight: 500; 
+    display: none; 
+    z-index: 999999; 
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+  }
+  .toast.error { background: rgba(244, 63, 94, 0.9); }
+  @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  
+  .loading { color: var(--accent-main); font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+  .loading::after { content: ''; width: 12px; height: 12px; border: 2px solid var(--accent-main); border-right-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+
+  .status-low { 
+    color: #FFA116; 
+    font-weight: 600; 
+    background: rgba(255, 161, 22, 0.1); 
+    padding: 6px 12px; 
+    border-radius: 6px; 
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 161, 22, 0.2);
+  }
+
+  .checkbox-group { 
+    margin: 0 0 20px 0; 
+    font-size: 0.95rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    font-weight: 500; 
+    color: var(--text-secondary); 
+    height: 48px; 
+  }
+  .checkbox-group input[type="checkbox"] { 
+    width: 20px; 
+    height: 20px; 
+    margin: 0; 
+    cursor: pointer; 
+    accent-color: var(--accent-main);
+  }
+  .checkbox-group input[type="number"] { 
+    width: 120px; 
+    margin: 0 0 0 auto; 
+  }
+
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 768px) {
+    .sidebar { 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; 
+      height: 70px; 
+      display: flex; 
+      flex-direction: row; 
+      overflow-x: auto; 
+      white-space: nowrap; 
+      padding: 0 20px; 
+      align-items: center; 
+      gap: 16px; 
+      border-right: none;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .sidebar h2 { display: none; }
+    .sidebar a { 
+      display: inline-flex; 
+      padding: 10px 18px; 
+      margin: 0; 
+      border-radius: 8px; 
+      background: var(--bg-surface); 
+      border: 1px solid var(--border-color);
+    }
+    .sidebar a.active { 
+      background: rgba(99, 102, 241, 0.15); 
+      border-color: var(--accent-main);
+    }
+    .main { 
+      margin-left: 0; 
+      margin-top: 70px; 
+      width: 100%; 
+      padding: 24px 20px; 
+    }
+    .flex { grid-template-columns: 1fr; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .gauge svg { width: 100%; max-width: 220px; }
+  }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+
+<body>
+<div class="sidebar">
+  <h2>ERP Core</h2>
+  <a id="nav-dashboard" onclick="showPage('dashboard')" class="active">Dashboard</a>
+  <a id="nav-stock" onclick="showPage('stock')">Inventory</a>
+  <a id="nav-lowStock" onclick="showPage('lowStock')">Alerts</a>
+  <a id="nav-inStock" onclick="showPage('inStock')">Inbound</a>
+  <a id="nav-outStock" onclick="showPage('outStock')">Outbound</a>
+  <a id="nav-heatmap" onclick="showPage('heatmap')">Logistics Map</a>
+  <a id="nav-bills" onclick="showPage('bills')">Ledger</a>
+  <a id="nav-vendors" onclick="showPage('vendors')">Partners</a>
+  <a id="nav-reports" onclick="showPage('reports')">Analytics</a>
+</div>
+
+<div class="main">
+  <div id="dashboard" class="page">
+    <h1>Command Center</h1>
+    <div class="card-standard">
+      <h2>Production Capacity</h2>
+      <div class="gauge-grid" id="gaugeContainer"><span class="loading">Synchronizing...</span></div>
+    </div>
+    
+    <div class="card-standard">
+      <h2>Dispatch Velocity</h2>
+      <div style="display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap;">
+        <select id="dashChartMonth" style="width:180px; margin:0;">
+          <option value="0">Annual Overview</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <input type="number" id="dashChartYear" style="width:140px; margin:0;">
+        <button onclick="loadDashboardChart()" style="width:auto; margin:0;">Refresh Data</button>
+      </div>
+      <div id="kitBarChart" style="height:400px; width:100%;"></div>
+    </div>
+    
+    <div class="flex">
+      <div class="card">
+        <h2>Fulfillment (Outbound)</h2>
+        <select id="kitSelect"><option></option></select>
+        <input type="number" id="kitQty" placeholder="Units to Dispatch">
+        <select id="deliveryPartner">
+          <option></option>
+          <option value="DTDC">DTDC Logistics</option>
+          <option value="Delhivery">Delhivery</option>
+          <option value="Trackon">Trackon</option>
+          <option value="India Post">India Post</option>
+        </select>
+        <button id="btnDispatch" onclick="dispatch()">Execute Dispatch</button>
+      </div>
+      
+      <div class="card">
+        <h2>Procurement (Inbound)</h2>
+        <select id="stockSelect"><option></option></select>
+        <input type="number" id="stockQty" placeholder="Units Received">
+        <select id="vendorSelect"><option></option></select>
+        <input type="number" id="stockPrice" placeholder="Unit Value (₹)">
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="hasGst" onchange="toggleGst()">
+          <label for="hasGst">Include Tax (GST)</label>
+          <input type="number" id="gstPercent" placeholder="Tax %" style="display: none;">
+        </div>
+        <button id="btnStock" onclick="submitStockEntry()">Register Inventory</button>
+      </div>
+
+      <div class="card">
+        <h2>Document Upload (Purchase Order)</h2>
+        <input type="text" id="billProductName" placeholder="Asset Name">
+        <input type="date" id="billDate">
+        <input type="number" id="billQty" placeholder="Unit Count">
+        <label style="display:block; margin: 0 0 12px; font-size:13px; font-weight:500; color:var(--text-secondary);">Source File (PDF/IMG):</label>
+        <input type="file" id="billFile" accept="image/*,.pdf">
+        <button id="btnSubmitBill" onclick="processBill()">Commit to Ledger</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="stock" class="page" style="display:none">
+    <h1>Inventory Metrics</h1>
+    <div class="card-standard">
+      <table>
+        <thead>
+          <tr>
+            <th>Asset Key</th>
+            <th>On-Hand Quantity</th>
+            <th>FD Capability</th>
+            <th>Basic Capability</th>
+          </tr>
+        </thead>
+        <tbody id="stockTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="lowStock" class="page" style="display:none">
+    <h1>Critical Alerts</h1>
+    <div class="card-standard">
+      <table>
+        <thead><tr><th>Asset Key</th><th>Current Volume</th><th>System Status</th></tr></thead>
+        <tbody id="lowStockTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="inStock" class="page" style="display:none">
+    <h1>Inbound Ledger</h1>
+    <div class="card-standard">
+      <table>
+        <thead><tr><th>Timestamp</th><th>Asset Logged</th><th>Partner Entity</th><th>Delta In</th><th>Capital Outflow</th><th>New Balance</th></tr></thead>
+        <tbody id="inStockTable"><tr><td colspan="6">Synchronizing database...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="outStock" class="page" style="display:none">
+    <h1>Outbound Ledger</h1>
+    <div class="card-standard">
+      <table>
+        <thead><tr><th>Timestamp</th><th>Package Type</th><th>Logistics Node</th><th>Delta Out</th></tr></thead>
+        <tbody id="outStockTable"><tr><td colspan="4">Synchronizing database...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="bills" class="page" style="display:none">
+    <h1>Financial Documents</h1>
+    <div class="card-standard">
+      <table>
+        <thead><tr><th>Ingestion Time</th><th>Invoice Date</th><th>Asset Logged</th><th>Volume</th><th>Reference File</th></tr></thead>
+        <tbody id="billsTable"><tr><td colspan="5">Retrieving documents...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="vendors" class="page" style="display:none">
+    <div class="page-header">
+      <h1>Partner Directory</h1>
+      <button id="btnToggleVendor" onclick="toggleVendorForm()" style="width:auto;">+ Register Entity</button>
+    </div>
+    
+    <div class="card-standard" id="vendorFormCard" style="display:none;">
+      <h2 id="vendorFormTitle">Register New Partner</h2>
+      <input type="hidden" id="vendorId">
+      <input type="text" id="vendorName" placeholder="Entity Designation" style="max-width: 400px;">
+      <input type="text" id="vendorMobile" placeholder="Contact ID" style="max-width: 400px;">
+      <textarea id="vendorProducts" placeholder="Supply domain / Goods" rows="3" style="max-width: 400px;"></textarea>
+      
+      <div style="display: flex; gap: 16px;">
+        <button id="btnSaveVendor" onclick="submitVendor()" style="width:auto;">Commit Entry</button>
+        <button id="btnCancelVendor" class="btn-cancel" onclick="toggleVendorForm(false)">Abort</button>
+      </div>
+    </div>
+
+    <div class="card-standard">
+      <h2>Active Entities</h2>
+      <table>
+        <thead><tr><th>Designation</th><th>Contact ID</th><th>Domain</th><th>Protocol</th></tr></thead>
+        <tbody id="vendorsTable"><tr><td colspan="4">Querying directory...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="heatmap" class="page" style="display:none">
+    <h1>Geospatial Logistics</h1>
+    <div class="card-standard">
+      <div style="display:flex; gap:16px; margin-bottom:24px; flex-wrap:wrap;">
+      <select id="heatmapMonth" style="width:180px; margin:0;">
+        <option value="0">Annual Overview</option>
+        <option value="1">January</option>
+        <option value="2">February</option>
+        <option value="3">March</option>
+        <option value="4">April</option>
+        <option value="5">May</option>
+        <option value="6">June</option>
+        <option value="7">July</option>
+        <option value="8">August</option>
+        <option value="9">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+        <input type="number" id="heatmapYear" value="2026" style="width:140px; margin:0;">
+        <button onclick="loadHeatmap()" style="width:auto; margin:0;">Render Topology</button>
+      </div>
+      <div id="heatmapContainer" style="height:500px;"></div>
+    </div>
+  </div>
+
+  <div id="reports" class="page" style="display:none">
+    <h1>Intelligence & Analytics</h1>
+    <div class="card-standard">
+      <h2>Data Extraction</h2>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <button onclick="triggerExport('exportStockCSV', 'Stock_Matrix.csv')" style="width:auto; background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border-color); box-shadow:none;">📥 Matrix: Inventory</button>
+        <button onclick="triggerExport('exportInCSV', 'Inbound_Matrix.csv')" style="width:auto; background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border-color); box-shadow:none;">📥 Matrix: Inbound</button>
+        <button onclick="triggerExport('exportOutCSV', 'Outbound_Matrix.csv')" style="width:auto; background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border-color); box-shadow:none;">📥 Matrix: Outbound</button>
+      </div>
+    </div>
+
+    <div class="card-standard">
+      <h2>Global Fulfillment Trends</h2>
+      <button onclick="loadKitAnalytics()" style="width:auto; margin-bottom:24px;">Compile Data</button>
+      <table>
+        <thead><tr><th>Package Designation</th><th>Lifetime Velocity</th></tr></thead>
+        <tbody id="analyticsTable"></tbody>
+      </table>
+    </div>
+
+    <div class="card-standard">
+      <h2>Temporal Review (Monthly)</h2>
+      <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 32px; flex-wrap: wrap;">
+        <select id="reportMonth" style="width:180px; margin:0;">
+          <option value="1">January</option><option value="2">February</option>
+          <option value="3">March</option><option value="4">April</option>
+          <option value="5">May</option><option value="6">June</option>
+          <option value="7">July</option><option value="8">August</option>
+          <option value="9">September</option><option value="10">October</option>
+          <option value="11">November</option><option value="12">December</option>
+        </select>
+        <input type="number" id="reportYear" value="2026" style="width:120px; margin:0;">
+        <button onclick="loadMonthlyReports()" style="width:auto; margin:0;">Execute Query</button>
+      </div>
+      <div class="flex">
+        <div class="card">
+          <h3>Assembled Nodes</h3>
+          <table>
+            <thead><tr><th>Designation</th><th>Volume</th></tr></thead>
+            <tbody id="monthlyKitTable"></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Raw Asset Burn</h3>
+          <table>
+            <thead><tr><th>Asset Class</th><th>Volume Burned</th></tr></thead>
+            <tbody id="monthlyConsumptionTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ⚠️ IMPORTANT: REPLACE THIS URL WITH YOUR GAS DEPLOYMENT WEB APP URL
+const API_URL = "https://script.google.com/macros/s/AKfycbyNSAmozyV_-P3l3behutUupupH0JGVYINp7J26a4tdJ9EpJknssCOMYTLedVahayApfg/exec";
+
+/* =========================
+   API Wrapper
+========================= */
+async function apiCall(action, method = 'GET', data = {}) {
+  let url = API_URL;
+  let options = { redirect: "follow" };
+
+  if (method === 'GET') {
+    const params = new URLSearchParams({ action, ...data });
+    url = `${API_URL}?${params.toString()}`;
+    options.method = 'GET';
+  } else {
+    options.method = 'POST';
+    options.headers = { "Content-Type": "text/plain;charset=utf-8" };
+    options.body = JSON.stringify({ action, data });
+  }
+
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+    if (result.error) throw new Error(result.error);
+    return result;
+  } catch (error) {
+    console.error("API Error:", error);
+    showToast("Connection to mainframe failed. Review console.", true);
+    throw error;
+  }
+}
+
+/* =========================
+   Global Data Cache
+========================= */
+let appData = { stockSummary: [], products: [], kits: [], predictions: {}, vendors: [] };
+let cachedVendors = [];
+
+/* =========================
+   UI Utilities
+========================= */
+function showToast(message, isError=false){
+  const toast = document.getElementById("toast");
+  toast.innerText = message;
+  toast.className = `toast ${isError ? 'error' : ''}`;
+  toast.style.display = "block";
+  setTimeout(() => toast.style.display = "none", 3500);
+}
+
+function toggleButtons(disabled) {
+  document.getElementById("btnDispatch").disabled = disabled;
+  document.getElementById("btnStock").disabled = disabled;
+  document.getElementById("btnSubmitBill").disabled = disabled;
+  
+  document.getElementById("btnDispatch").innerText = disabled ? "Executing..." : "Execute Dispatch";
+  document.getElementById("btnStock").innerText = disabled ? "Writing..." : "Register Inventory";
+  document.getElementById("btnSubmitBill").innerText = disabled ? "Uploading..." : "Commit to Ledger";
+}
+
+function formatDate(dateString){
+  try { const d = new Date(dateString); return isNaN(d) ? dateString : d.toLocaleString([], {dateStyle: 'medium'}); } catch(e) { return dateString || ""; }
+}
+
+function formatDateTime(dateString){
+  try { const d = new Date(dateString); return isNaN(d) ? dateString : d.toLocaleString([], {dateStyle: 'medium', timeStyle: 'short'}); } catch(e) { return dateString || ""; }
+}
+
+function toggleGst() {
+  const gstInput = document.getElementById("gstPercent");
+  if (document.getElementById("hasGst").checked) { gstInput.style.display = "block"; } else { gstInput.style.display = "none"; gstInput.value = ""; }
+}
+
+/* =========================
+   Navigation & Initialization
+========================= */
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p => p.style.display = "none");
+  document.getElementById(page).style.display = "block";
+
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  document.getElementById('nav-' + page).classList.add('active');
+
+  if(page === "dashboard") loadDashboardChart();
+  if(page === "stock") renderStock(appData.stockSummary);
+  if(page === "lowStock") renderLowStock(appData.stockSummary);
+  if(page === "inStock") loadInStock();
+  if(page === "outStock") loadOutStock();
+  if(page === "bills") loadBillsHistory();
+  if(page === "vendors") loadVendors();
+  if(page === "heatmap"){
+    const d = new Date();
+    document.getElementById('heatmapMonth').value = d.getMonth() + 1;
+    document.getElementById('heatmapYear').value = d.getFullYear();
+    loadHeatmap();
+  }
+  if(page === "reports"){
+    const d = new Date();
+    document.getElementById('reportMonth').value = d.getMonth() + 1;
+    document.getElementById('reportYear').value = d.getFullYear();
+  }
+}
+
+function fetchAllData() {
+  document.getElementById("gaugeContainer").innerHTML = '<span class="loading">Establishing mainframe link...</span>';
+  
+  const d = new Date();
+  document.getElementById('dashChartMonth').value = d.getMonth() + 1;
+  document.getElementById('dashChartYear').value = d.getFullYear();
+
+  apiCall("getInitialPayload").then(data => {
+    appData = data; 
+    renderDashboard(data.predictions);
+    renderDropdowns(data.products, data.kits, data.vendors);
+    renderStock(data.stockSummary);
+    renderLowStock(data.stockSummary);
+    
+    loadDashboardChart();
+    toggleButtons(false);
+  });
+}
+
+window.onload = function() { fetchAllData(); };
+
+/* =========================
+   Core Rendering
+========================= */
+function renderDashboard(predictions) {
+  if(!predictions || !predictions.kits || predictions.kits.length === 0) {
+    document.getElementById("gaugeContainer").innerHTML = "<p style='color:var(--text-muted)'>No configurations detected.</p>"; return;
+  }
+  let html = ""; 
+  predictions.kits.forEach(k => { html += createGauge(k.kit, k.capacity, k.capacity || 1); });
+  document.getElementById("gaugeContainer").innerHTML = html;
+}
+
+function createGauge(title, value, max){
+  const safePercent = Math.min(max ? (value/max) : 0, 1);
+  const circumference = Math.PI * 90;
+  const offset = circumference - safePercent * circumference;
+
+  return `
+    <div class="gauge">
+      <h3>${title}</h3>
+      <svg width="220" height="110" viewBox="0 0 220 120">
+        <defs>
+          <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6366F1" />
+            <stop offset="100%" stop-color="#818CF8" />
+          </linearGradient>
+        </defs>
+        <path d="M20 110 A90 90 0 0 1 200 110" fill="none" stroke="var(--border-color)" stroke-width="20" stroke-linecap="round"/>
+        <path d="M20 110 A90 90 0 0 1 200 110" fill="none" stroke="url(#glow)" stroke-width="20" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+        <text x="110" y="95" text-anchor="middle" font-size="36" font-weight="700" fill="var(--text-primary)">${Math.round(value)}</text>
+      </svg>
+    </div>`;
+}
+
+function renderStock(data){
+  const html = data.map(r => `<tr>
+    <td>${r.product}</td>
+    <td style="font-weight: 500;">${Number(r.stock).toLocaleString()}</td>
+    <td style="color: var(--accent-hover); font-weight: 600;">${r.profCapacity}</td>
+    <td style="color: var(--text-primary); font-weight: 600;">${r.basicCapacity}</td>
+  </tr>`).join('');
+  document.getElementById("stockTable").innerHTML = html || "<tr><td colspan='4'>Database empty</td></tr>";
+}
+
+function renderLowStock(data){
+  const rows = data.filter(r => r.status === "LOW").map(r => `<tr><td>${r.product}</td><td>${Number(r.stock).toLocaleString()}</td><td><span class="status-low">RESTOCK REQ.</span></td></tr>`);
+  document.getElementById("lowStockTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='3' style='color:var(--success)'>All systems nominal. No alerts.</td></tr>";
+}
+
+function renderDropdowns(products, kits, vendors){
+  const stockSelect = $("#stockSelect"), kitSelect = $("#kitSelect"), vendorSelect = $("#vendorSelect"), partnerSelect = $("#deliveryPartner");
+
+  if (stockSelect.hasClass("select2-hidden-accessible")) stockSelect.select2('destroy');
+  if (kitSelect.hasClass("select2-hidden-accessible")) kitSelect.select2('destroy');
+  if (vendorSelect.hasClass("select2-hidden-accessible")) vendorSelect.select2('destroy');
+  if (partnerSelect.hasClass("select2-hidden-accessible")) partnerSelect.select2('destroy');
+
+  const prodHtml = '<option></option>' + products.map(p => `<option value="${p}">${p}</option>`).join('');
+  const kitHtml = '<option></option>' + kits.map(k => `<option value="${k}">${k}</option>`).join('');
+  const vendorHtml = '<option></option>' + (vendors || []).map(v => `<option value="${v.name}">${v.name}</option>`).join('');
+
+  stockSelect.html(prodHtml).select2({ placeholder: "Query Asset...", width: '100%' });
+  kitSelect.html(kitHtml).select2({ placeholder: "Query Package...", width: '100%' });
+  vendorSelect.html(vendorHtml).select2({ placeholder: "Assign Entity (Optional)", width: '100%' });
+  partnerSelect.select2({ placeholder: "Assign Logistics Protocol...", width: '100%', minimumResultsForSearch: Infinity });
+}
+
+/* =========================
+   Transactions Actions
+========================= */
+function dispatch(){
+  const kit = document.getElementById("kitSelect").value;
+  const qty = document.getElementById("kitQty").value;
+  const partner = document.getElementById("deliveryPartner").value;
+
+  if(!kit || !qty || qty <= 0) return showToast("Invalid parameters detected.", true);
+  if(!partner) return showToast("Logistics protocol required.", true);
+
+  toggleButtons(true);
+  
+  apiCall("dispatchKit", "POST", { kit, qty, partner }).then(res => {
+    showToast(res.message, res.message.includes("Insufficient"));
+    document.getElementById("kitQty").value = ''; 
+    $("#kitSelect").val(null).trigger('change'); 
+    $("#deliveryPartner").val(null).trigger('change'); 
+    fetchAllData();
+  }).catch(() => toggleButtons(false));
+}
+
+function submitStockEntry(){
+  const payload = {
+    product: document.getElementById("stockSelect").value,
+    qty: document.getElementById("stockQty").value,
+    vendor: document.getElementById("vendorSelect").value,
+    price: document.getElementById("stockPrice").value,
+    hasGst: document.getElementById("hasGst").checked,
+    gstPercent: document.getElementById("gstPercent").value
+  };
+
+  if(!payload.product || !payload.qty || payload.qty <= 0) return showToast("Invalid asset parameters.", true);
+
+  toggleButtons(true);
+  
+  apiCall("addStock", "POST", payload).then(res => {
+    showToast(res.message);
+    document.getElementById("stockQty").value = ''; 
+    document.getElementById("stockPrice").value = ''; 
+    document.getElementById("hasGst").checked = false;
+    document.getElementById("gstPercent").value = '';
+    document.getElementById("gstPercent").style.display = 'none';
+    
+    $("#stockSelect").val(null).trigger('change'); 
+    $("#vendorSelect").val(null).trigger('change'); 
+    fetchAllData(); 
+  }).catch(() => toggleButtons(false));
+}
+
+function processBill() {
+  const productName = document.getElementById("billProductName").value;
+  const date = document.getElementById("billDate").value;
+  const qty = document.getElementById("billQty").value;
+  const fileInput = document.getElementById("billFile");
+
+  if (!productName || !date || !qty) return showToast("Incomplete document parameters.", true);
+
+  toggleButtons(true);
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      sendBillToBackend({ productName, date, qty, fileData: e.target.result, fileName: file.name, mimeType: file.type });
+    };
+    reader.readAsDataURL(file); 
+  } else {
+    sendBillToBackend({ productName, date, qty, fileData: null, fileName: null, mimeType: null });
+  }
+}
+
+function sendBillToBackend(payload) {
+  apiCall("uploadBill", "POST", payload).then(res => {
+    showToast(res.message, res.message.includes("Error"));
+    toggleButtons(false);
+    
+    document.getElementById("billProductName").value = '';
+    document.getElementById("billDate").value = '';
+    document.getElementById("billQty").value = '';
+    document.getElementById("billFile").value = '';
+  }).catch(() => toggleButtons(false));
+}
+
+/* =========================
+   Vendors Logic
+========================= */
+function toggleVendorForm(forceShow = null) {
+  const card = document.getElementById("vendorFormCard"), btn = document.getElementById("btnToggleVendor");
+  const shouldShow = forceShow !== null ? forceShow : card.style.display === "none";
+
+  if (shouldShow) {
+    card.style.display = "block"; btn.innerText = "✖ Terminate Entry"; btn.style.background = "var(--danger)"; btn.style.border = "none";
+  } else {
+    card.style.display = "none"; btn.innerText = "+ Register Entity"; btn.style.background = "linear-gradient(135deg, var(--accent-main) 0%, #4F46E5 100%)"; resetVendorForm();
+  }
+}
+
+function loadVendors() {
+  document.getElementById("vendorsTable").innerHTML = "<tr><td colspan='4' class='loading'>Querying entities...</td></tr>";
+  apiCall("getVendors").then(data => {
+    cachedVendors = data;
+    const rows = data.map(v => `<tr><td>${v.name}</td><td style="font-family:monospace;">${v.mobile || '-'}</td><td>${v.products}</td><td><button class="btn-small" onclick="editVendor('${v.id}')">Modify</button></td></tr>`);
+    document.getElementById("vendorsTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='4'>No entities registered.</td></tr>";
+  });
+}
+
+function submitVendor() {
+  const payload = {
+    id: document.getElementById("vendorId").value,
+    name: document.getElementById("vendorName").value,
+    mobile: document.getElementById("vendorMobile").value,
+    products: document.getElementById("vendorProducts").value
+  };
+
+  if (!payload.name || !payload.products) return showToast("Entity Designation and Domain required.", true);
+
+  const btn = document.getElementById("btnSaveVendor");
+  btn.disabled = true; btn.innerText = "Committing...";
+
+  apiCall("saveVendor", "POST", payload).then(res => {
+    showToast(res.message, res.message.includes("Error"));
+    toggleVendorForm(false); 
+    loadVendors(); 
+    fetchAllData(); 
+  });
+}
+
+function editVendor(id) {
+  const vendor = cachedVendors.find(v => v.id === id);
+  if (!vendor) return;
+
+  toggleVendorForm(true);
+  document.getElementById("vendorFormTitle").innerText = "Modify Entity";
+  document.getElementById("vendorId").value = vendor.id;
+  document.getElementById("vendorName").value = vendor.name;
+  document.getElementById("vendorMobile").value = vendor.mobile || ''; 
+  document.getElementById("vendorProducts").value = vendor.products;
+  
+  document.getElementById("btnCancelVendor").style.display = "inline-block";
+  document.getElementById("btnSaveVendor").innerText = "Update Protocol";
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetVendorForm() {
+  document.getElementById("vendorFormTitle").innerText = "Register New Partner";
+  document.getElementById("vendorId").value = '';
+  document.getElementById("vendorName").value = '';
+  document.getElementById("vendorMobile").value = ''; 
+  document.getElementById("vendorProducts").value = '';
+  document.getElementById("btnCancelVendor").style.display = "none";
+  
+  const btnSave = document.getElementById("btnSaveVendor");
+  btnSave.disabled = false; btnSave.innerText = "Commit Entry";
+}
+
+/* =========================
+   Table Fetches & Reports
+========================= */
+function loadInStock(){
+  document.getElementById("inStockTable").innerHTML = "<tr><td colspan='6' class='loading'>Querying ledger...</td></tr>";
+  apiCall("getTransactions").then(data => {
+    const rows = data.inStock.slice().reverse().map(r => `<tr><td style="font-family:monospace; color:var(--text-secondary);">${formatDateTime(r.date)}</td><td>${r.item}</td><td>${r.vendor}</td><td style="color:var(--success); font-weight:600;">+${r.qty}</td><td style="font-family:monospace;">₹${Number(r.totalPrice).toFixed(2)}</td><td>${Math.round(r.updatedStock)}</td></tr>`);
+    document.getElementById("inStockTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='6'>Ledger empty</td></tr>";
+  });
+}
+
+function loadOutStock(){
+  document.getElementById("outStockTable").innerHTML = "<tr><td colspan='4' class='loading'>Querying ledger...</td></tr>";
+  apiCall("getTransactions").then(data => {
+    const rows = data.outStock.slice().reverse().map(r => `<tr><td style="font-family:monospace; color:var(--text-secondary);">${formatDateTime(r.date)}</td><td>${r.kit}</td><td>${r.partner}</td><td style="color:var(--accent-hover); font-weight:600;">-${r.qty}</td></tr>`);
+    document.getElementById("outStockTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='4'>Ledger empty</td></tr>";
+  });
+}
+
+function loadBillsHistory() {
+  document.getElementById("billsTable").innerHTML = "<tr><td colspan='5' class='loading'>Querying ledger...</td></tr>";
+  apiCall("getBillsHistory").then(data => {
+    const rows = data.slice().reverse().map(r => {
+      let fileLink = (r.fileUrl && r.fileUrl !== "No File Uploaded") ? `<a href="${r.fileUrl}" target="_blank" class="btn-link">📄 Open Document</a>` : "<span style='color:var(--text-muted)'>NULL</span>";
+      return `<tr><td style="font-family:monospace; color:var(--text-secondary);">${formatDateTime(r.timestamp)}</td><td>${formatDate(r.date)}</td><td>${r.productName}</td><td>${r.qty}</td><td>${fileLink}</td></tr>`;
+    });
+    document.getElementById("billsTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='5'>No documents recorded.</td></tr>";
+  });
+}
+
+function triggerExport(action, filename) {
+  showToast("Compiling extraction payload...");
+  apiCall(action).then(res => {
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(new Blob([res.csv], { type: 'text/csv' }));
+    link.download = filename;
+    link.click();
+    showToast("Data extraction successful!");
+  });
+}
+
+function loadKitAnalytics() {
+  document.getElementById("analyticsTable").innerHTML = "<tr><td colspan='2' class='loading'>Processing node data...</td></tr>";
+  apiCall("getKitAnalytics").then(data => {
+    const rows = Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([kit, qty]) => `<tr><td>${kit}</td><td style="font-family:monospace; color:var(--accent-hover); font-weight:600;">${qty}</td></tr>`);
+    document.getElementById("analyticsTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='2'>No metrics available</td></tr>";
+  });
+}
+
+function loadMonthlyReports() {
+  const month = document.getElementById("reportMonth").value;
+  const year = document.getElementById("reportYear").value;
+
+  document.getElementById("monthlyKitTable").innerHTML = "<tr><td colspan='2' class='loading'>Computing...</td></tr>";
+  document.getElementById("monthlyConsumptionTable").innerHTML = "<tr><td colspan='2' class='loading'>Computing...</td></tr>";
+
+  apiCall("getMonthlyReport", "GET", { month, year }).then(data => {
+    const rows = Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([k, q]) => `<tr><td>${k}</td><td style="font-family:monospace;">${q}</td></tr>`);
+    document.getElementById("monthlyKitTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='2' style='color:var(--text-muted)'>Nil dispatches</td></tr>";
+  });
+
+  apiCall("getConsumptionReport", "GET", { month, year }).then(data => {
+    const rows = Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([i, q]) => `<tr><td>${i}</td><td style="font-family:monospace;">${q}</td></tr>`);
+    document.getElementById("monthlyConsumptionTable").innerHTML = rows.length ? rows.join('') : "<tr><td colspan='2' style='color:var(--text-muted)'>Nil burn rate</td></tr>";
+  });
+}
+
+/* =========================
+   DASHBOARD BAR CHART - Dark Mode Adjusted
+========================= */
+function loadDashboardChart() {
+  const month = Number(document.getElementById("dashChartMonth").value);
+  const year = Number(document.getElementById("dashChartYear").value);
+  const chartDom = document.getElementById("kitBarChart");
+
+  let myChart = echarts.getInstanceByDom(chartDom);
+  if (myChart) { echarts.dispose(myChart); }
+  
+  myChart = echarts.init(chartDom);
+  myChart.showLoading({ text: 'Compiling Vectors...', color: '#6366F1', textColor: '#94A3B8', maskColor: 'rgba(11, 14, 20, 0.8)' });
+
+  apiCall("getMonthlyReport", "GET", { month, year }).then(data => {
+    myChart.hideLoading();
+    
+    const kits = Object.keys(data);
+    const quantities = Object.values(data);
+
+    if (kits.length === 0) {
+      myChart.dispose();
+      chartDom.innerHTML = "<div style='text-align:center; padding-top:150px; color:var(--text-muted); font-weight:500;'>Insufficient data to render vectors.</div>";
+      return;
+    }
+
+    const option = {
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, backgroundColor: '#131720', borderColor: '#232A3B', textStyle: {color: '#FFF'} },
+      grid: { left: '3%', right: '4%', bottom: '15%', containLabel: true },
+      xAxis: { 
+        type: 'category', 
+        data: kits, 
+        axisLabel: { interval: 0, rotate: 15, color: '#94A3B8', fontFamily: 'Inter' },
+        axisLine: { lineStyle: { color: '#232A3B' } }
+      },
+      yAxis: { 
+        type: 'value', 
+        name: 'Volume Out',
+        nameTextStyle: { color: '#64748B' },
+        axisLabel: { color: '#94A3B8', fontFamily: 'monospace' },
+        splitLine: { lineStyle: { color: '#232A3B', type: 'dashed' } }
+      },
+      series: [{
+        name: 'Nodes Dispatched',
+        type: 'bar',
+        barWidth: '35%',
+        data: quantities,
+        itemStyle: { 
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: '#818CF8' },
+            { offset: 1, color: '#4F46E5' }
+          ]),
+          borderRadius: [6, 6, 0, 0] 
+        }
+      }]
+    };
+    myChart.setOption(option);
+  }).catch(err => {
+    myChart.dispose();
+    chartDom.innerHTML = "<div style='text-align:center; padding-top:150px; color:var(--danger);'>Vector rendering failed.</div>";
+  });
+}
+
+/* =========================
+   HEATMAP - Dark Mode Adjusted
+========================= */
+function loadHeatmap() {
+  const month = Number(document.getElementById("heatmapMonth").value);
+  const year = Number(document.getElementById("heatmapYear").value);
+  const chartDom = document.getElementById("heatmapContainer");
+
+  let myChart = echarts.getInstanceByDom(chartDom);
+  if (myChart) {
+    echarts.dispose(myChart);
+  }
+
+  myChart = echarts.init(chartDom);
+  myChart.showLoading({ text: 'Mapping Coordinates...', color: '#6366F1', textColor: '#94A3B8', fontSize: 14, maskColor: 'rgba(11, 14, 20, 0.8)' });
+
+  apiCall("getStateHeatmap", "GET", { month, year }).then(data => {
+    myChart.hideLoading();
+    
+    if (!data || data.length === 0) { 
+      myChart.dispose();
+      chartDom.innerHTML = "<div style='text-align:center; padding-top:200px; color:var(--text-muted); font-size:16px; font-weight:500;'>Telemetry blank for selected cycle.</div>"; 
+      return; 
+    }
+    
+    renderHeatmap(myChart, data);
+  }).catch(err => {
+    console.error("Heatmap Data Error:", err);
+    myChart.dispose();
+    chartDom.innerHTML = "<div style='text-align:center; padding-top:200px; color:var(--danger); font-weight:500;'>Telemetry link failed.</div>";
+  });
+}
+
+function renderHeatmap(myChart, data) {
+  fetch("https://code.highcharts.com/mapdata/countries/in/in-all.geo.json")
+    .then(res => {
+      if (!res.ok) throw new Error("Topology file unreadable");
+      return res.json();
+    })
+    .then(geoJson => {
+      echarts.registerMap('india', geoJson);
+      
+      let maxValue = Math.max(...data.map(d => d.value));
+      if (maxValue === 0 || !isFinite(maxValue)) maxValue = 10; 
+      
+      myChart.setOption({
+        tooltip: { 
+          trigger: 'item', 
+          backgroundColor: '#131720',
+          borderColor: '#232A3B',
+          textStyle: { color: '#FFF' },
+          formatter: '<div style="font-weight:600;margin-bottom:4px;">{b}</div>Volume Out: <span style="color:#818CF8;font-family:monospace;font-weight:bold;">{c}</span>' 
+        },
+        visualMap: { 
+          min: 0, 
+          max: maxValue, 
+          text: ['High Vol', 'Low Vol'],
+          inRange: { color: ['#1A1F2B', '#312E81', '#4338CA', '#4F46E5', '#818CF8'] },
+          calculable: true,
+          textStyle: { color: '#94A3B8' }
+        },
+        series: [{ 
+          type: 'map', 
+          map: 'india', 
+          data: data,
+          roam: true, 
+          label: { show: false },
+          itemStyle: {
+            borderColor: '#232A3B',
+            borderWidth: 1,
+            areaColor: '#0F131A' 
+          },
+          emphasis: { 
+            itemStyle: { areaColor: '#6366F1', borderColor: '#FFF', borderWidth: 1.5, shadowBlur: 10, shadowColor: 'rgba(99, 102, 241, 0.5)' },
+            label: { show: true, color: '#FFFFFF', fontWeight: 'bold' } 
+          }
+        }]
+      });
+    })
+    .catch(err => {
+      console.error("GeoJSON Map Error:", err);
+      document.getElementById("heatmapContainer").innerHTML = "<p style='color:var(--danger); text-align:center; padding-top:200px;'>Topology engine failure.</p>";
+    });
+}
+</script>
+</body>
+</html>
